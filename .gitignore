@@ -1,0 +1,5 @@
+# Archivos y carpetas comunes a ignorar
+.bsp/
+.scala-build/
+
+.metals/
