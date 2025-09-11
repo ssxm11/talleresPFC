@@ -3,3 +3,6 @@
 .scala-build/
 
 .metals/
+project/
+target/
+build.sbt

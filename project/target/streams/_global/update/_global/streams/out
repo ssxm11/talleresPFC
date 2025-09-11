@@ -1,0 +1,7 @@
+[0m[[0m[0mdebug[0m] [0m[0mnot up to date. inChanged = true, force = false[0m
+[0m[[0m[0mdebug[0m] [0m[0mUpdating ProjectRef(uri("file:/C:/Users/cordo/samue%20univalle/programacion%20funcional%20y%20concurrente/program/taller1/project/"), "taller1-build")...[0m
+[0m[[0m[0minfo[0m] [0m[0mUpdating taller1-build[0m
+[0m[[0m[0minfo[0m] [0m[0mResolved taller1-build dependencies[0m
+[0m[[0m[0minfo[0m] [0m[0mFetching artifacts of taller1-build[0m
+[0m[[0m[0minfo[0m] [0m[0mFetched artifacts of taller1-build[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone updating ProjectRef(uri("file:/C:/Users/cordo/samue%20univalle/programacion%20funcional%20y%20concurrente/program/taller1/project/"), "taller1-build")[0m
