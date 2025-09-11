@@ -6,13 +6,48 @@
  l.head: Int (devuelve el primer elemento de la lista l)
  l.tail: List[Int] (devuelve la lista sin el primer elemento l)*/
 package object FuncionesRecursivas{
-    def maxLin(l : List [Int ]): Int = {
-    1+1
+     /**
+   * Ejercicio 1.1: Máximo de una lista de enteros
+   */
+  def maxLin(l: List[Int]): Int = {
+    // Si la lista está vacía, lanzamos una excepción
+    if (l.isEmpty) {
+      throw new IllegalArgumentException("La lista no puede ser vacía.")
     }
+    
+    // Función auxiliar que implementa la recursión lineal
+    def go(lista: List[Int], maximoActual: Int): Int = {
+      if (lista.isEmpty) {
+        maximoActual
+      } else {
+        val nuevoMaximo = if (lista.head > maximoActual) lista.head else maximoActual
+        go(lista.tail, nuevoMaximo)
+      }
+    }
+    
+    // Llamada inicial a la función auxiliar
+    go(l.tail, l.head)
+  }
 
-    def maxIt(l : List [Int ]): Int =  {
-    1+1
+  def maxIt(l: List[Int]): Int = {
+    // Si la lista está vacía, lanzamos una excepción
+    if (l.isEmpty) {
+      throw new IllegalArgumentException("La lista no puede ser vacía.")
     }
+    
+    // Función auxiliar que implementa el proceso iterativo
+    def loop(lista: List[Int], acumulador: Int): Int = {
+      if (lista.isEmpty) {
+        acumulador
+      } else {
+        val nuevoAcumulador = if (lista.head > acumulador) lista.head else acumulador
+        loop(lista.tail, nuevoAcumulador)
+      }
+    }
+    
+    // Llamada inicial a la función auxiliar
+    loop(l.tail, l.head)
+  }
 
 /*Su tarea en este ejercicio consiste en implementar, usando recursion, dos funciones:
  movsTorresHanoi y torresHanoi. La primera, movsTorresHanoi , recibe n, el numero
@@ -50,4 +85,5 @@ t1 t2 t3 a=b, indicando
     }
 
 
-    }
+    
+}
