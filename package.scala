@@ -1,89 +1,59 @@
-/* Se desea calcular el maximo de una lista de enteros positivos, no vaca.
- Implemente las funciones maxLin, y maxIt que calculen ese valor, pero la primera
- genere un proceso de recursion lineal, mientras la segunda genere un proceso iterativo.
- Hay tres metodos que se proveen en List[Int] que pueden ser utiles para este ejercicio:
- l.isEmpty: Boolean (devuelve si una lista l esta vaca)
- l.head: Int (devuelve el primer elemento de la lista l)
- l.tail: List[Int] (devuelve la lista sin el primer elemento l)*/
-package object FuncionesRecursivas{
-     /**
-   * Ejercicio 1.1: Máximo de una lista de enteros
-   */
-  def maxLin(l: List[Int]): Int = {
-    // Si la lista está vacía, lanzamos una excepción
-    if (l.isEmpty) {
-      throw new IllegalArgumentException("La lista no puede ser vacía.")
-    }
-    
-    // Función auxiliar que implementa la recursión lineal
-    def go(lista: List[Int], maximoActual: Int): Int = {
-      if (lista.isEmpty) {
-        maximoActual
+package object Comparador {
+type AlgoritmoOrd [T ] = List [T ] => ( List [T ] , Int )
+type Comparador [T ] = (T,T)=>Boolean
+def insert [T] ( e :T, l : List [T ] , comp : Comparador [T ] ) : ( List [T ] , Int ) = {
+ // Caso base: lista vacía → simplemente devolvemos el elemento en una lista
+    case Nil => (List(e), 0)
+
+    // Si e debe ir antes del primer elemento
+    case x :: xs =>
+      if (comp(e, x)) {
+        (e :: l, 1) // Insertamos delante, hicimos 1 comparación
       } else {
-        val nuevoMaximo = if (lista.head > maximoActual) lista.head else maximoActual
-        go(lista.tail, nuevoMaximo)
+        // Insertar recursivamente en la cola
+        val (newTail, c) = insert(e, xs, comp)
+        (x :: newTail, c + 1) // agregamos x al inicio y contamos la comparación actual
       }
-    }
-    
-    // Llamada inicial a la función auxiliar
-    go(l.tail, l.head)
-  }
-
-  def maxIt(l: List[Int]): Int = {
-    // Si la lista está vacía, lanzamos una excepción
-    if (l.isEmpty) {
-      throw new IllegalArgumentException("La lista no puede ser vacía.")
-    }
-    
-    // Función auxiliar que implementa el proceso iterativo
-    def loop(lista: List[Int], acumulador: Int): Int = {
-      if (lista.isEmpty) {
-        acumulador
-      } else {
-        val nuevoAcumulador = if (lista.head > acumulador) lista.head else acumulador
-        loop(lista.tail, nuevoAcumulador)
-      }
-    }
-    
-    // Llamada inicial a la función auxiliar
-    loop(l.tail, l.head)
-  }
-
-/*Su tarea en este ejercicio consiste en implementar, usando recursion, dos funciones:
- movsTorresHanoi y torresHanoi. La primera, movsTorresHanoi , recibe n, el numero
- de discos y devuelve el numero mnimo de movimientos necesarios para mover n discos de
- la primera varilla (o torre) a la tercera usando la segunda como intermediaria. Con este
- valor, se podra calcular cuantos siglos se demoraran los monjes en acabar la tarea.*/
-
-    def movsTorresHanoi(n: Int ): BigInt = {
-        if (n == 0) {
-            0
-        } else {
-            2 * movsTorresHanoi(n - 1) + 1
-        }
-    }
-/*La segunda, torresHanoi, recibe n, el numero de discos, y tres enteros t1 t2 t3 repre
-sentando los identi cadores de las tres varillas (torres) y devuelve una lista de movimien
-tos, donde un movimiento es una pareja (ab) donde ab 
-t1 t2 t3 a=b, indicando
- que se mueva el disco en lo alto de la varilla a hacia la varilla b.*/
-    def torresHanoi(n:Int , t1:Int , t2:Int , t3:Int ): List [(Int , Int )] = {
-        // Pasar n discos de la torre t1 a la torre t3 usando t2 como intermediaria
-        // Devuelve la lista de movimientos de parejas (a,b) indicando mover un disco de la torre a hacia
-        // la torre b
-        if (n == 0) {
-            List()
-        } else {
-            // Mover n-1 discos de t1 a t2 usando t3 como intermediaria
-            val movimientos1 = torresHanoi(n - 1, t1, t3, t2)
-            // Mover el disco n de t1 a t3
-            val movimiento2 = List((t1, t3))
-            // Mover n-1 discos de t2 a t3 usando t1 como intermediaria
-            val movimientos3 = torresHanoi(n - 1, t2, t1, t3)
-            movimientos1 ++ movimiento2 ++ movimientos3  
-        }
-    }
-
-
-    
 }
+def insertionSort [T] ( comp : Comparador [T ] ) : AlgoritmoOrd [T ] = {
+// R e c i b e una l i s t a de e l em en t o s de t i p o T y un comparador de e s o s e l em en t o s
+// y d e v u e l v e l a l i s t a ordenada y e l numero de compa rac iones r e a l i z a d a s en una p a r e j a
+// usando e l I n s e r t i o n S o r t
+5
+. . .
+}
+def menoresQue_noMenoresQue [T ] ( l : List [T ] , v :T, comp : Comparador [T ] ) : ( List [T ] , List [T ] , Int ) = {
+l match {
+    case Nil => (Nil, Nil, 0)  // Caso base: lista vacía
+    case x :: xs =>
+      val (menores, noMenores, c) = menoresQue_noMenoresQue(xs, v, comp)
+      if (comp(x, v)) {
+        (x :: menores, noMenores, c + 1) // x va a la lista de menores
+      } else {
+        (menores, x :: noMenores, c + 1) // x va a la lista de no menores
+      }
+  }
+}
+def quickSort [T] ( comp : Comparador [T ] ) : AlgoritmoOrd [T ] = {
+// R e c i b e una l i s t a de e l em en t o s de t i p o T y un comparador de e s o s e l em en t o s
+// y d e v u e l v e l a l i s t a ordenada y e l numero de compa rac iones r e a l i z a d a s en una p a r e j a
+// Usando e l q u i c k S o r t
+case Nil => Nil                       // Caso base: lista vacía
+  case x :: xs =>
+    // Particionar la lista en menores y mayores (según el comparador)
+    val (l1, l2) = xs.partition(e => comp(e, x))
+
+    // Ordenar recursivamente y concatenar
+    quickSort(l1, comp) ::: (x :: quickSort(l2, comp))
+}
+def comparar [T ] ( a1 : AlgoritmoOrd [T ] , a2 : AlgoritmoOrd [T ] , l : List [T ] ) : ( Int , Int ) = {
+// R e c i b e dos a l g o r i tm o s de o rdenam ien to y una l i s t a para o rd ena r
+// y d e v u e l v e una p a r e j a con e l numero de compa rac iones h e chas por a1 ,
+// y e l numero de compa rac iones h e chas por a2 para esa i n s t a n c i a de l en p a r t i c u l a r
+// s i l o s dos a l g o r i tm o s dan e l mismo r e s u l t a d o
+// s ino , d e v u e l v e (−1,−1)
+val ( l1 , c1 ) = a1 ( l )
+val ( l2 , c2 ) = a2 ( l )
+if ( l1==l2 ) ( c1 , c2 ) else (−1 ,−1)
+}
+} 
