@@ -17,13 +17,19 @@ def insert[T](e: T, l: List[T], comp: Comparador[T]): (List[T], Int) = {
   }
 }
 
-def insertionSort [T] ( comp : Comparador [T ] ) : AlgoritmoOrd [T ] = {
-// R e c i b e una l i s t a de e l em en t o s de t i p o T y un comparador de e s o s e l em en t o s
-// y d e v u e l v e l a l i s t a ordenada y e l numero de compa rac iones r e a l i z a d a s en una p a r e j a
-// usando e l I n s e r t i o n S o r t
-5
-. . .
-}
+
+def insertionSort[T](comp: Comparador[T]): AlgoritmoOrd[T] = { l =>
+    def ordenar(resto: List[T], acumulado: List[T], comparaciones: Int): (List[T], Int) =
+      if (resto.isEmpty) (acumulado, comparaciones)
+      else {
+        val x = resto.head
+        val xs = resto.tail
+        val (nuevoAcumulado, c) = insert(x, acumulado, comp)
+        ordenar(xs, nuevoAcumulado, comparaciones + c)
+      }
+    ordenar(l, Nil, 0)
+  }
+
 def menoresQue_noMenoresQue[T](l: List[T], v: T, comp: Comparador[T]): (List[T], List[T], Int) = {
   if (l.isEmpty) {
     (Nil, Nil, 0) 
@@ -64,14 +70,12 @@ def quickSort[T](comp: Comparador[T]): AlgoritmoOrd[T] = {
 
 }
 
-def comparar [T ] ( a1 : AlgoritmoOrd [T ] , a2 : AlgoritmoOrd [T ] , l : List [T ] ) : ( Int , Int ) = {
-// R e c i b e dos a l g o r i tm o s de o rdenam ien to y una l i s t a para o rd ena r
-// y d e v u e l v e una p a r e j a con e l numero de compa rac iones h e chas por a1 ,
-// y e l numero de compa rac iones h e chas por a2 para esa i n s t a n c i a de l en p a r t i c u l a r
-// s i l o s dos a l g o r i tm o s dan e l mismo r e s u l t a d o
-// s ino , d e v u e l v e (−1,−1)
-val ( l1 , c1 ) = a1 ( l )
-val ( l2 , c2 ) = a2 ( l )
-if ( l1==l2 ) ( c1 , c2 ) else (−1 ,−1)
+def comparar[T](a1: AlgoritmoOrd[T], a2: AlgoritmoOrd[T], l: List[T]): (Int, Int) = {
+  val (l1, c1) = a1(l)
+  val (l2, c2) = a2(l)
+
+  if (l1 == l2) (c1, c2)
+  else (-1, -1)
 }
+
 } 

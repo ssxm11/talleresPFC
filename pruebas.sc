@@ -1,6 +1,6 @@
 import Comparador ._
  import scala.util.Random
- val random=newRandom()
+ val random=new Random()
  def listaAlAzar(long:Int): List[Int] ={
  //Crea una lista de long enteros,
  // con valores aleatorios entre 1 y long 2
@@ -36,6 +36,34 @@ val lNeg=List(-10,-5,0,5,10)
 val (resN,cN)=insert(1,lNeg,menorQue)
 
 // ## pruebas para insertionSort
+val lAsc100 = (1 to 100).toList
+val lAsc1000 = (1 to 1000).toList
+val lDsc100 = (1 to 100).toList.reverse
+val lDsc1000 = (1 to 1000).toList.reverse
+
+// ### prueba caso con lista vacia (caso base) 1
+val prueba0 = iSort_Asc(Nil)
+// ### prueba caso con lista pequeña ordenada en orden inverso 2
+val prueba11 = iSort_Desc(List(3,2,1))
+
+// ### prueba caso con lista pequeña desordenada 3
+val prueba12 = iSort_Asc(List(4,5,6,1,2,3))
+// ### prueba caso con lista ya ordenada con muchos elementos 4
+val prueba3 = iSort_Asc(lAsc100)
+val prueba4 = iSort_Asc(lAsc1000)
+val prueba5 = iSort_Asc(lDsc100)
+val prueba6 = iSort_Asc(lDsc1000)
+val l5 = listaAlAzar(5)
+val l10 = listaAlAzar(10)
+val l20 = listaAlAzar(20)
+val l50 = listaAlAzar(50)
+// ### prueba caso con lista con muchos elementos aleatorios 5
+val prueba7 = iSort_Asc(l5)
+val prueba8 = iSort_Asc(l10)
+val prueba9 = iSort_Asc(l20)
+val prueba10 =iSort_Asc(l50)
+
+
 
 // ## pruebas para menoresQue_noMenoresQue
 //### prueba de caso base 1
@@ -94,21 +122,43 @@ val (resN,cN)=insert(1,lNeg,menorQue)
  qSort_Asc(List(4,5,6,1,2,3))
  comparar(iSort_Asc,qSort_Asc,List(4,5,6,1,2,3))
  comparar(iSort_Asc,qSort_Desc,List(4,5,6,1,2,3))
- val lAsc100=(1 to 100).toList
- val lAsc1000=(1 to 1000).toList
- val lDsc100=(1 to 100).toList.reverse
- val lDsc1000=(1 to 1000).toList.reverse
- comparar(iSort_Asc,qSort_Asc,lAsc100)
- comparar(iSort_Asc,qSort_Asc,lAsc1000)
- comparar(iSort_Asc,qSort_Asc,lDsc100)
- comparar(iSort_Asc,qSort_Asc,lDsc100)
+ 
+
+val l5 = listaAlAzar(5)
+val l10 = listaAlAzar(10)
+val l20 = listaAlAzar(20)
+val l50 = listaAlAzar(50)
+
+val prueba7 = iSort_Asc(l5)
+val prueba8 = iSort_Asc(l10)
+val prueba9 = iSort_Asc(l20)
+val prueba10 = iSort_Asc(l50)
+
+
+
  val l5=listaAlAzar(5)
  val l10=listaAlAzar(10)
  val l20=listaAlAzar(20)
  val l50=listaAlAzar(50)
  
+ //Comparar
+val compar1 = comparar(iSort_Asc, iSort_Desc, List(4, 5, 6, 1, 2, 3))
+val compar2 = comparar(iSort_Asc, iSort_Desc, lAsc100)
+val compar3 = comparar(iSort_Asc, iSort_Desc, lAsc1000)
+val compar4 = comparar(iSort_Asc, iSort_Desc, lDsc100)
+val compar5 = comparar(iSort_Asc, iSort_Desc, lDsc1000)
+val compar6 = comparar(iSort_Asc, iSort_Desc, l5)
+val compar7 = comparar(iSort_Asc, iSort_Desc, l10)
+val compar8 = comparar(iSort_Asc, iSort_Desc, l20)
+val compar9 = comparar(iSort_Asc, iSort_Desc,l50)
 
- comparar(iSort_Asc ,qSort_Asc , l5)
- comparar(iSort_Asc ,qSort_Asc , l10)
- comparar(iSort_Asc ,qSort_Asc , l20)
- comparar(iSort_Asc ,qSort_Asc , l50)
+//para todas las pruebas, el resultado debe ser (-1,-1) ya que los algoritmos ordenan en forma diferente y nunca serán iguales
+// caso contrario si los algoritmos ordenan de la misma forma, el resultado debe ser (c1,c2) donde c1 y c2 son los conteos de comparaciones de cada algoritmo respectivamente
+comparar(iSort_Asc,qSort_Asc,lAsc100)
+comparar(iSort_Asc,qSort_Asc,lAsc1000)
+comparar(iSort_Asc,qSort_Asc,lDsc100)
+comparar(iSort_Asc,qSort_Asc,lDsc1000)
+comparar(iSort_Asc ,qSort_Asc , l5)
+comparar(iSort_Asc ,qSort_Asc , l10)
+comparar(iSort_Asc ,qSort_Asc , l20)
+comparar(iSort_Asc ,qSort_Asc , l50)
