@@ -1,81 +1,35 @@
-package object Comparador {
-type AlgoritmoOrd [T ] = List [T ] => ( List [T ] , Int )
-type Comparador [T ] = (T,T)=>Boolean
-def insert[T](e: T, l: List[T], comp: Comparador[T]): (List[T], Int) = {
-  if (l.isEmpty) {
-    (List(e), 0) // caso base: lista vacía
-  } else {
-    val x = l.head
-    val xs = l.tail
-
-    if (comp(e, x)) {
-      (e :: l, 1) // insertar delante y contar una comparación
-    } else {
-      val (newTail, c) = insert(e, xs, comp)
-      (x :: newTail, c + 1) // reconstruir lista y acumular comparaciones
-    }
-  }
-}
-
-
-def insertionSort[T](comp: Comparador[T]): AlgoritmoOrd[T] = { l =>
-    def ordenar(resto: List[T], acumulado: List[T], comparaciones: Int): (List[T], Int) =
-      if (resto.isEmpty) (acumulado, comparaciones)
-      else {
-        val x = resto.head
-        val xs = resto.tail
-        val (nuevoAcumulado, c) = insert(x, acumulado, comp)
-        ordenar(xs, nuevoAcumulado, comparaciones + c)
-      }
-    ordenar(l, Nil, 0)
-  }
-
-def menoresQue_noMenoresQue[T](l: List[T], v: T, comp: Comparador[T]): (List[T], List[T], Int) = {
-  if (l.isEmpty) {
-    (Nil, Nil, 0) 
-  } else {
-    val x = l.head
-    val xs = l.tail
-
-    val (menores, noMenores, c) = menoresQue_noMenoresQue(xs, v, comp)
-
-    if (comp(x, v)) {
-      (x :: menores, noMenores, c + 1) // x va a la lista de menores
-    } else {
-      (menores, x :: noMenores, c + 1) // x va a la lista de no menores
-    }
-  }
-}
-
-def quickSort[T](comp: Comparador[T]): AlgoritmoOrd[T] = {
-  def ordenar(l: List[T]): (List[T], Int) = {
-    if (l.isEmpty) {
-      (Nil, 0) // caso base: lista vacía
-    } else {
-      val pivot = l.head
-      val xs = l.tail
-
-      
-      val (menores, noMenores, cPart) = menoresQue_noMenoresQue(xs, pivot, comp)
-
-      // ordenar recursivamente las dos partes
-      val (menoresOrd, cMenores)   = ordenar(menores)
-      val (noMenoresOrd, cNoMenores) = ordenar(noMenores)
-
-      // concatenar resultado y acumular comparaciones
-      (menoresOrd ++ (pivot :: noMenoresOrd), cPart + cMenores + cNoMenores)
-    }
-  }
-  ordenar
-
-}
-
-def comparar[T](a1: AlgoritmoOrd[T], a2: AlgoritmoOrd[T], l: List[T]): (Int, Int) = {
-  val (l1, c1) = a1(l)
-  val (l2, c2) = a2(l)
-
-  if (l1 == l2) (c1, c2)
-  else (-1, -1)
-}
-
-} 
+ package object Huffman{
+ abstract class ArbolH
+ case class Nodo (izq: ArbolH, der: ArbolH,
+ cars: List[Char] , peso: Int) extends ArbolH
+ case class Hoja(car: Char, peso: Int) extends ArbolH
+ // Parte 1: Funciones esenciales y sencillas
+ def peso(arbol: ArbolH): Int =arbol match{ ...}
+ def cars(arbol: ArbolH): List[Char] =arbol match {...}
+ def hacerNodoArbolH(izq: ArbolH, der: ArbolH) =
+ Nodo(izq, der, cars(izq) ::: cars(der), peso(izq) +peso(der))
+ // Parte 2: Construyendo arboles de Huffman
+ /*
+* En este taller estamos trabajando con listas de caracteres.
+* La funcion cadenaALista crea una lista de caracteres correspondiente a una cadena dada
+ */
+ def cadenaALista(cad: String): List[Char] =cad.toList
+ def ocurrencias(cars: List[Char]): List[(Char, Int)] = {...}
+ def listaDeHojasOrdenadas(frecs: List[(Char, Int)]): List[Hoja] = {...}
+ def listaUnitaria(arboles: List[ArbolH]): Boolean= {...}
+ def combinar(arboles: List[ArbolH]): List[ArbolH] = {...}
+ def hastaQue(cond: List[ArbolH]=>Boolean, mezclar:List[ArbolH]=>List[ArbolH] )
+ (listaOrdenadaArboles: List[ArbolH]): List[ArbolH] = {...}
+ def crearArbolDeHuffman(cars: List[Char]): ArbolH= {...}
+ // Part3 3: Decodificar
+ type Bit= Int
+ def decodificar(arbol: ArbolH, bits: List[Bit]): List[Char] = {...}
+ // Parte 4a: Codificando usando arboles de Huffman
+ def codificar(arbol: ArbolH)(texto: List[Char]): List[Bit] = {...}
+ // Parte 4b: Codificando usando tablas de codigos
+ type TablaCodigos=List[(Char, List[Bit])]
+ def codigoEnBits(tabla: TablaCodigos)(car: Char): List[Bit] = {...}
+ def mezclarTablasDeCodigos(a: TablaCodigos, b: TablaCodigos): TablaCodigos = {...}
+ def convertir(arbol: ArbolH): TablaCodigos= {...}
+ def codificarRapido(arbol: ArbolH)(texto: List[Char]): List[Bit] = {...}
+ }
