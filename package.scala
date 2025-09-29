@@ -65,13 +65,55 @@
    }
  }
  def hastaQue(cond: List[ArbolH]=>Boolean, mezclar:List[ArbolH]=>List[ArbolH] )
- (listaOrdenadaArboles: List[ArbolH]): List[ArbolH] = {...}
- def crearArbolDeHuffman(cars: List[Char]): ArbolH= {...}
+ (listaOrdenadaArboles: List[ArbolH]): List[ArbolH] = {
+  case Nil => Nil // caso base "extremo" (aunque normalmente nunca debería quedar vacía)
+  case _ =>
+    if (cond(lista)) lista
+    else hastaQue(cond)(mezclar)(mezclar(lista))
+  }
+
+def crearArbolDeHuffman(cars: List[Char]): ArbolH = {
+  hastaQue(_.size == 1)(combinar)(listaOrdenadaArboles(cars)).head
+}
+
  // Part3 3: Decodificar
  type Bit= Int
- def decodificar(arbol: ArbolH, bits: List[Bit]): List[Char] = {...}
+ def decodificar(arbol: ArbolH, bits: List[Bit]): List[Char] = {
+  def recorrer(nodo: ArbolH, bs: List[Bit]): List[Char] = nodo match {
+    case Hoja(c, _) =>
+      // Llegamos a una hoja -> devolvemos el caracter y reiniciamos desde la raíz
+      c :: (if (bs.isEmpty) Nil else recorrer(arbol, bs))
+
+    case Nodo(izq, der, _, _) =>
+      bs match {
+        case Nil       => Nil // no hay más bits
+        case b :: resto =>
+          if (b == 0) recorrer(izq, resto)
+          else recorrer(der, resto)
+      }
+  }
+
+  recorrer(arbol, bits)
+  }
  // Parte 4a: Codificando usando arboles de Huffman
- def codificar(arbol: ArbolH)(texto: List[Char]): List[Bit] = {...}
+ def codificar(arbol: ArbolH)(texto: List[Char]): List[Bit] = {
+  def codigoDeChar(c: Char, nodo: ArbolH, camino: List[Bit]): List[Bit] = nodo match {
+    case Hoja(car, _) if car == c =>
+      camino
+
+    case Nodo(izq, der, _, _) =>
+      // Buscar recursivamente en cada lado
+      val izqCamino = codigoDeChar(c, izq, camino :+ 0)
+      if (izqCamino.nonEmpty) izqCamino
+      else codigoDeChar(c, der, camino :+ 1)
+
+    case _ =>
+      Nil
+  }
+
+  // Codificar cada carácter del texto concatenando sus bits
+  texto.flatMap(c => codigoDeChar(c, arbol, Nil))
+ }
  // Parte 4b: Codificando usando tablas de codigos
  type TablaCodigos=List[(Char, List[Bit])]
  def codigoEnBits(tabla: TablaCodigos)(car: Char): List[Bit] = {...}
