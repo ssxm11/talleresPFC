@@ -38,8 +38,13 @@
  Para ayudarlo con esta tarea, siga los siguientes pasos:
  1. Escriba una funcion ocurrencias, que reciba un texto en forma de lista de caracteres
  y devuelva la lista con la frecuencia en que cada caracter aparece en el texto*/
- def ocurrencias(cars: List[Char]): List[(Char, Int)] = {
-   cars.groupBy(identity).view.mapValues(_.size).toList
+ def ocurrencias(cars: List[Char]): List[(Char, Int)] = cars match {
+   case Nil =>
+    Nil
+
+  case x :: xs =>
+    val (iguales, distintos) = xs.partition(_ == x)
+    (x, iguales.length + 1) :: ocurrencias(distintos)
  }
 
  /* Escriba una funcion listaDeHojasOrdenadas, que reciba una lista de frecuencias
@@ -47,7 +52,24 @@
  de Huffman correspondiente, ordenada ascendentemente por la frecuencia de cada
  caracter. */
  def listaDeHojasOrdenadas(frecs: List[(Char, Int)]): List[Hoja] = {
-   frecs.map { case (c, p) => Hoja(c, p) }.sortBy(_.peso)
+    // comparador local: ordena ascendentemente por el peso (frecuencia)
+  def compararPorPeso(h1: Hoja, h2: Hoja): Boolean = h1.peso < h2.peso
+
+  // inserta una hoja en la posición correcta dentro de una lista ordenada
+  def insertarOrdenado(h: Hoja, hojas: List[Hoja]): List[Hoja] = hojas match {
+    case Nil => List(h)
+    case x :: xs =>
+      if (compararPorPeso(h, x)) h :: hojas
+      else x :: insertarOrdenado(h, xs)
+  }
+
+  // cuerpo principal que transforma y ordena recursivamente
+  frecs match {
+    case Nil => Nil
+    case (c, p) :: rest =>
+      val hojasOrdenadas = listaDeHojasOrdenadas(rest)
+      insertarOrdenado(Hoja(c, p), hojasOrdenadas)
+  }
  }
  def listaUnitaria(arboles: List[ArbolH]): Boolean= {
    arboles match {
