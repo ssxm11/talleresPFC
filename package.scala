@@ -96,14 +96,13 @@
     insertarOrdenado(nuevo, resto)              // inserta manteniendo el orden por peso
 }
 
- 
- def hastaQue(cond: List[ArbolH]=>Boolean, mezclar:List[ArbolH]=>List[ArbolH] )
- (listaOrdenadaArboles: List[ArbolH]): List[ArbolH] = {
-  case Nil => Nil // caso base "extremo" (aunque normalmente nunca debería quedar vacía)
-  case _ =>
-    if (cond(lista)) lista
-    else hastaQue(cond)(mezclar)(mezclar(lista))
-  }
+ def hastaQue(cond: List [ArbolH]=>Boolean , mezclar: List [ArbolH]=>List [ArbolH] )
+ ( listaOrdenadaArboles : List [ArbolH]): List [ArbolH] = {
+
+  if (cond(listaOrdenadaArboles)) listaOrdenadaArboles
+  else hastaQue(cond, mezclar)(mezclar(listaOrdenadaArboles))
+}
+
 
 def crearArbolDeHuffman(cars: List[Char]): ArbolH = {
   hastaQue(_.size == 1)(combinar)(listaOrdenadaArboles(cars)).head
