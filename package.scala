@@ -138,8 +138,26 @@ def crearArbolDeHuffman(cars: List[Char]): ArbolH = {
  }
  // Parte 4b: Codificando usando tablas de codigos
  type TablaCodigos=List[(Char, List[Bit])]
- def codigoEnBits(tabla: TablaCodigos)(car: Char): List[Bit] = {...}
- def mezclarTablasDeCodigos(a: TablaCodigos, b: TablaCodigos): TablaCodigos = {...}
- def convertir(arbol: ArbolH): TablaCodigos= {...}
- def codificarRapido(arbol: ArbolH)(texto: List[Char]): List[Bit] = {...}
+ def codigoEnBits(tabla: TablaCodigos)(car: Char): List[Bit] = tabla match {
+  case Nil => Nil // caso base: la tabla está vacía, no se encontró el carácter
+  case (c, bits) :: resto =>
+    if (c == car) bits // encontramos el carácter, devolvemos su lista de bits
+    else codigoEnBits(resto)(car) // seguimos buscando en el resto
+    }
+ def mezclarTablasDeCodigos(a: TablaCodigos, b: TablaCodigos): TablaCodigos = {
+  val izquierda = a.map { case (c, bits) => (c, 0 :: bits) }
+  val derecha   = b.map { case (c, bits) => (c, 1 :: bits) }
+  izquierda ++ derecha
+ }
+ def convertir(arbol: ArbolH): TablaCodigos=arbol match {
+  case Hoja(c, _) => List((c, List()))
+  case Nodo(izq, der, _, _) =>
+    val izqCod = convertir(izq)
+    val derCod = convertir(der)
+    mezclarTablasDeCodigos(izqCod, derCod)
+    }
+ def codificarRapido(arbol: ArbolH)(texto: List[Char]): List[Bit] = {
+  val tabla = convertir(arbol)
+  texto.flatMap(codigoEnBits(tabla))
+ }
  }
