@@ -1,4 +1,4 @@
- package object Huffman{
+package object Huffman {
  abstract class ArbolH
  case class Nodo (izq: ArbolH, der: ArbolH,
  cars: List[Char] , peso: Int) extends ArbolH
@@ -13,7 +13,7 @@
  def peso(arbol: ArbolH): Int =arbol match{
     case Hoja(_, p) => p
       case Nodo(_, _, _, p) => p
- }
+}
  def cars(arbol: ArbolH): List[Char] =arbol match{
    case Hoja(c, _) => List(c)
    case Nodo(_, _, cs, _) => cs
@@ -71,6 +71,9 @@
       insertarOrdenado(Hoja(c, p), hojasOrdenadas)
   }
  }
+    // Construye la lista ordenada de arboles (hojas) a partir de una lista de caracteres
+    def listaOrdenadaArboles(carsList: List[Char]): List[ArbolH] =
+      listaDeHojasOrdenadas(ocurrencias(carsList))
  def listaUnitaria(arboles: List[ArbolH]): Boolean= {
    arboles match {
      case Nil => false
@@ -85,7 +88,6 @@
   case a1 :: a2 :: resto =>
     val nuevo = hacerNodoArbolH(a1, a2)         // combina los dos árboles más livianos
 
-    // inserción ordenada sin usar sort
     def insertarOrdenado(a: ArbolH, lista: List[ArbolH]): List[ArbolH] = lista match {
       case Nil => List(a)
       case x :: xs =>
@@ -93,15 +95,12 @@
         else x :: insertarOrdenado(a, xs)
     }
 
-    insertarOrdenado(nuevo, resto)              // inserta manteniendo el orden por peso
+    insertarOrdenado(nuevo, resto)              // inserta manteniendo el orden por peso/frecuencia
 }
-
- def hastaQue(cond: List [ArbolH]=>Boolean , mezclar: List [ArbolH]=>List [ArbolH] )
- ( listaOrdenadaArboles : List [ArbolH]): List [ArbolH] = {
-
+def hastaQue(cond: List[ArbolH] => Boolean, mezclar: List[ArbolH] => List[ArbolH])(listaOrdenadaArboles: List[ArbolH]): List[ArbolH] =
   if (cond(listaOrdenadaArboles)) listaOrdenadaArboles
   else hastaQue(cond, mezclar)(mezclar(listaOrdenadaArboles))
-}
+
 
 
 def crearArbolDeHuffman(cars: List[Char]): ArbolH = {
@@ -110,7 +109,7 @@ def crearArbolDeHuffman(cars: List[Char]): ArbolH = {
 
  // Part3 3: Decodificar
  type Bit= Int
- def decodificar(arbol: ArbolH, bits: List[Bit]): List[Char] = {
+def decodificar(arbol: ArbolH, bits: List[Bit]): List[Char] = {
   def recorrer(nodo: ArbolH, bs: List[Bit]): List[Char] = nodo match {
     case Hoja(c, _) =>
       // Llegamos a una hoja -> devolvemos el caracter y reiniciamos desde la raíz
@@ -118,7 +117,7 @@ def crearArbolDeHuffman(cars: List[Char]): ArbolH = {
 
     case Nodo(izq, der, _, _) =>
       bs match {
-        case Nil       => Nil // no hay más bits
+        case Nil       => Nil 
         case b :: resto =>
           if (b == 0) recorrer(izq, resto)
           else recorrer(der, resto)
@@ -134,7 +133,6 @@ def crearArbolDeHuffman(cars: List[Char]): ArbolH = {
       camino
 
     case Nodo(izq, der, _, _) =>
-      // Buscar recursivamente en cada lado
       val izqCamino = codigoDeChar(c, izq, camino :+ 0)
       if (izqCamino.nonEmpty) izqCamino
       else codigoDeChar(c, der, camino :+ 1)
@@ -143,15 +141,14 @@ def crearArbolDeHuffman(cars: List[Char]): ArbolH = {
       Nil
   }
 
-  // Codificar cada carácter del texto concatenando sus bits
   texto.flatMap(c => codigoDeChar(c, arbol, Nil))
  }
  // Parte 4b: Codificando usando tablas de codigos
  type TablaCodigos=List[(Char, List[Bit])]
  def codigoEnBits(tabla: TablaCodigos)(car: Char): List[Bit] = tabla match {
-  case Nil => Nil // caso base: la tabla está vacía, no se encontró el carácter
+  case Nil => Nil // caso base
   case (c, bits) :: resto =>
-    if (c == car) bits // encontramos el carácter, devolvemos su lista de bits
+    if (c == car) bits 
     else codigoEnBits(resto)(car) // seguimos buscando en el resto
     }
  def mezclarTablasDeCodigos(a: TablaCodigos, b: TablaCodigos): TablaCodigos = {
