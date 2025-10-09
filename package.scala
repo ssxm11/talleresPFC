@@ -104,8 +104,9 @@ def hastaQue(cond: List[ArbolH] => Boolean, mezclar: List[ArbolH] => List[ArbolH
 
 
 def crearArbolDeHuffman(cars: List[Char]): ArbolH = {
-  hastaQue(_.size == 1)(combinar)(listaOrdenadaArboles(cars)).head
+  hastaQue(_.size == 1, combinar)(listaOrdenadaArboles(cars)).head
 }
+
 
  // Part3 3: Decodificar
  type Bit= Int
