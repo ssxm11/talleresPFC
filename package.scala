@@ -78,14 +78,25 @@
      case _ => false
    }
  }
- def combinar(arboles: List[ArbolH]): List[ArbolH] = {
-   arboles match {
-     case Nil => Nil
-     case a1 :: a2 :: rest =>
-       val nuevo = hacerNodoArbolH(a1, a2)
-       nuevo :: rest
-   }
- }
+ def combinar(arboles: List[ArbolH]): List[ArbolH] = arboles match {
+  case Nil => Nil                               // caso base: lista vacía
+  case _ :: Nil => arboles                      // caso con un solo árbol, nada que combinar
+
+  case a1 :: a2 :: resto =>
+    val nuevo = hacerNodoArbolH(a1, a2)         // combina los dos árboles más livianos
+
+    // inserción ordenada sin usar sort
+    def insertarOrdenado(a: ArbolH, lista: List[ArbolH]): List[ArbolH] = lista match {
+      case Nil => List(a)
+      case x :: xs =>
+        if (peso(a) <= peso(x)) a :: lista
+        else x :: insertarOrdenado(a, xs)
+    }
+
+    insertarOrdenado(nuevo, resto)              // inserta manteniendo el orden por peso
+}
+
+ 
  def hastaQue(cond: List[ArbolH]=>Boolean, mezclar:List[ArbolH]=>List[ArbolH] )
  (listaOrdenadaArboles: List[ArbolH]): List[ArbolH] = {
   case Nil => Nil // caso base "extremo" (aunque normalmente nunca debería quedar vacía)
