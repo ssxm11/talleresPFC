@@ -6,3 +6,7 @@
 project/
 target/
 build.sbt
+project/
+target/
+test/
+.idea/
