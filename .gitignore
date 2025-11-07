@@ -1,12 +1,7 @@
-# Archivos y carpetas comunes a ignorar
-.bsp/
-.scala-build/
-
+.bloop/
 .metals/
-project/
+.vscode/
+.project/
 target/
-build.sbt
-project/
-target/
-test/
 .idea/
+
