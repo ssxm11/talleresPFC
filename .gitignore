@@ -3,5 +3,7 @@
 .vscode/
 project/
 target
-
+target/streams
+.vscode
+project
 
