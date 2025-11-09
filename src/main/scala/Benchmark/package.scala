@@ -2,6 +2,8 @@ package object Benchmark {
   import kmedianas2D._
   import org.scalameter._
   import plotly._, element._, layout._
+  
+
 
   def tiempoDe[T](body: => T) = {
     val timeA1 = config(
