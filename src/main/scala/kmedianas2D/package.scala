@@ -1,8 +1,32 @@
+package object kmedianas2D {
 import scala.annotation.tailrec
 import common._
 import scala.util.Random
-import scala.collection.parallel.CollectionConverters._ // for .par in  val puntosPar = puntos.par 
-package object kmedianas2D {
+import scala.collection.{Map, Seq}
+import scala.collection.parallel.CollectionConverters._
+
+def generarPuntos(k: Int, num: Int): Seq[Punto] = {
+  val randx = new Random
+  val randy = new Random
+  (0 until num).map { i =>
+    val x = ((i + 1) % k) * 1.0 / k + randx.nextDouble() * 0.5
+    val y = ((i + 5) % k) * 1.0 / k + randy.nextDouble() * 0.5
+    new Punto(x, y)
+  }
+}
+def inicializarMedianas(k: Int, puntos: Seq[Punto]): Seq[Punto] = {
+  val rand = new Random
+  (0 until k).map(_ => puntos(rand.nextInt(puntos.length)))
+}
+
+/** umbral seguro: al menos 1, y proporcional al tamaño n.
+  * Ajusta n/10 según tu máquina (n/100 o math.sqrt(n) también pueden usarse).
+  */
+def umbral(n: Int): Int = {
+  val u = math.max(1, n / 10)   // 10% del total, nunca menos de 1
+  u
+}
+
 class Punto(val x: Double, val y: Double) {
   private def cuadrado(v: Double): Double = v * v
   def distanciaAlCuadrado(that: Punto): Double =
@@ -163,7 +187,9 @@ final def kMedianasPar(
   eta: Double
 ): Seq[Punto] = {
   // Clasificación concurrente
-  val clasificacion = clasificarPar(10000)(puntos, medianas)
+  val clasificacion = clasificarPar(umbral(puntos.length))(puntos, medianas)
+
+println(s"[Par] n=${puntos.length}, umbral=${umbral(puntos.length)}")
 
   // Actualización concurrente
   val nuevasMedianas = actualizarPar(clasificacion, medianas)
@@ -176,18 +202,6 @@ final def kMedianasPar(
   else
     kMedianasPar(puntos, nuevasMedianas, eta) // Paso recursivo
 }
-def generarPuntos(k: Int, num: Int): Seq[Punto] = {
-  val randx = new Random
-  val randy = new Random
-  (0 until num).map { i =>
-    val x = ((i + 1) % k) * 1.0 / k + randx.nextDouble() * 0.5
-    val y = ((i + 5) % k) * 1.0 / k + randy.nextDouble() * 0.5
-    new Punto(x, y)
-  }
-}
-def inicializarMedianas(k: Int, puntos: Seq[Punto]): Seq[Punto] = {
-  val rand = new Random
-  (0 until k).map(_ => puntos(rand.nextInt(puntos.length)))
-}
-  def umbral(n: Int): Int = 20000
+
+  
 }
